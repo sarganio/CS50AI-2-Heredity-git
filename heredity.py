@@ -142,20 +142,20 @@ def joint_probability(people, one_gene, two_genes, have_trait):
     ans = 1
     for person in people:
         # check if this person has known parents, if person doesn't take probability from PROBS
-        if person['father'] == None:
-            ans *= num_of_genes(person, one_gene, two_genes)
+        if people[person]['father'] == None:
+            ans *= PROBS["gene"][num_of_genes(person, one_gene, two_genes)]
         # else the person does have known parents - take mutation into account
         else:
             # probabiliy gene was inheirated from parent given parent has [index] genes
-            inheriateFromParentProb = []
+            inheriateFromParentProb = [0, 0, 0]
             # parent has 0 genes but mutation accured
             inheriateFromParentProb[0] = PROBS["mutation"]
             # parent has 1 genes and that genes was inherited or the other was passed on and mutation accured
             inheriateFromParentProb[1] = 0.5 + 0.5*PROBS["mutation"]
             # parent has 2 genes no mutation was accured
             inheriateFromParentProb[2] = 1 - PROBS["mutation"]
-            fatherNumOfGenes = num_of_genes(people[person['father']])
-            motherNumOfGenes = num_of_genes(people[person['mother']])
+            fatherNumOfGenes = num_of_genes(people[person]['father'], one_gene, two_genes)
+            motherNumOfGenes = num_of_genes(people[person]['mother'], one_gene, two_genes)
             # 1 gene - person got a gene from father or mother but not both
             if person in one_gene:
                 ans *= inheriateFromParentProb[fatherNumOfGenes] * (1 - inheriateFromParentProb[motherNumOfGenes]) + (1 - inheriateFromParentProb[fatherNumOfGenes]) * inheriateFromParentProb[motherNumOfGenes]
@@ -172,10 +172,10 @@ def joint_probability(people, one_gene, two_genes, have_trait):
 
 def num_of_genes(person, one_gene, two_genes):
     if person in one_gene:
-        return PROBS["gene"][1]
+        return 1
     if person in two_genes:
-        return PROBS["gene"][2]
-    return PROBS["gene"][0] 
+        return 2
+    return 0
 
 
 def update(probabilities, one_gene, two_genes, have_trait, p):
@@ -197,12 +197,10 @@ def normalize(probabilities):
     """
     normalizationFactor = 0
     for personName in probabilities.keys():
-        normalizationFactor = 1/sum(probabilities[personName]["gene"])
-        for prob in probabilities[personName]["gene"]:
-            prob *=normalizationFactor 
-        normalizationFactor = 1/sum(probabilities[personName]["trait"])
-        for prob in probabilities[personName]["trait"]:
-            prob *=normalizationFactor
+        normalizationFactor = 1/sum(probabilities[personName]["gene"].values())
+        probabilities[personName]["gene"].update((_, p*normalizationFactor) for _,p in probabilities[personName]["gene"].items()) 
+        normalizationFactor = 1/sum(probabilities[personName]["trait"].values())
+        probabilities[personName]["trait"].update((_, p*normalizationFactor) for _,p in probabilities[personName]["trait"].items()) 
 
 
 
