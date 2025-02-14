@@ -178,11 +178,6 @@ def num_of_genes(person, one_gene, two_genes):
     return PROBS["gene"][0] 
 
 
-def calculate_inheritance_given_genes_num(person, people, genesNum):
-    if genesNum == 0:
-        print(1)
-
-
 def update(probabilities, one_gene, two_genes, have_trait, p):
     """
     Add to `probabilities` a new joint probability `p`.
@@ -190,6 +185,8 @@ def update(probabilities, one_gene, two_genes, have_trait, p):
     Which value for each distribution is updated depends on whether
     the person is in `have_gene` and `have_trait`, respectively.
     """
+    for person in probabilities:
+
     raise NotImplementedError
 
 
