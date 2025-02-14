@@ -166,7 +166,7 @@ def joint_probability(people, one_gene, two_genes, have_trait):
             else:
                 # no inheritace from father and mother
                 ans *= (1 - inheriateFromParentProb[fatherNumOfGenes]) * (1 - inheriateFromParentProb[motherNumOfGenes])
-            ans *= PROBS["trait"][num_of_genes(person, one_gene, two_genes)][person in have_trait]
+        ans *= PROBS["trait"][num_of_genes(person, one_gene, two_genes)][person in have_trait]
     return ans
 
 
