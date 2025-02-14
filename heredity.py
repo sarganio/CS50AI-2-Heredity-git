@@ -141,7 +141,7 @@ def joint_probability(people, one_gene, two_genes, have_trait):
     """
     ans = 1
     for person in people:
-        # check if this person has known parents, if he/she doesn't take probability from PROBS
+        # check if this person has known parents, if person doesn't take probability from PROBS
         if person['father'] == None:
             ans *= num_of_genes(person, one_gene, two_genes)
             ans *= PROBS["trait"][person in have_trait]
