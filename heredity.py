@@ -144,7 +144,6 @@ def joint_probability(people, one_gene, two_genes, have_trait):
         # check if this person has known parents, if person doesn't take probability from PROBS
         if person['father'] == None:
             ans *= num_of_genes(person, one_gene, two_genes)
-            ans *= PROBS["trait"][person in have_trait]
         # else the person does have known parents - take mutation into account
         else:
             # probabiliy gene was inheirated from parent given parent has [index] genes
@@ -167,6 +166,7 @@ def joint_probability(people, one_gene, two_genes, have_trait):
             else:
                 # no inheritace from father and mother
                 ans *= (1 - inheriateFromParentProb[fatherNumOfGenes]) * (1 - inheriateFromParentProb[motherNumOfGenes])
+            ans *= PROBS["trait"][num_of_genes(person, one_gene, two_genes)][person in have_trait]
     return ans
 
 
